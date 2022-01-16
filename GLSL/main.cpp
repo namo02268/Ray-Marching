@@ -12,6 +12,13 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+unsigned int WIDTH = SCR_WIDTH;
+unsigned int HEIGHT = SCR_HEIGHT;
+
+// time
+float deltaTime = 0.0f;	// Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
+
 int main()
 {
     glfwInit();
@@ -19,7 +26,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "GLSL", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -35,7 +42,7 @@ int main()
         return -1;
     }
 
-    Shader ourShader("vs.glsl", "fs.glsl");
+    Shader ourShader("rect.vert", "noise.frag");
 
     float vertices[] = {
          1.0f,  1.0f, 0.0f,  // top right
@@ -71,21 +78,29 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        // input
-        processInput(window);
+        // time
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
 
-        // render
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        if (deltaTime >= 1.0f / 30.0f) {
+            lastFrame = currentFrame;
+            // input
+            processInput(window);
 
-        // render the triangle
-        ourShader.setVec2("resolution", glm::vec2(SCR_HEIGHT, SCR_WIDTH));
-        ourShader.use();
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            // render
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+            // render the triangle
+            ourShader.setVec2("resolution", glm::vec2(WIDTH, HEIGHT));
+            ourShader.setFloat("time", glfwGetTime());
+            ourShader.use();
+            glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
     }
 
     glDeleteVertexArrays(1, &VAO);
@@ -103,4 +118,6 @@ void processInput(GLFWwindow* window)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    WIDTH = width;
+    HEIGHT = height;
 }

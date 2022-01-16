@@ -146,8 +146,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fs.glsl" />
-    <None Include="vs.glsl" />
+    <None Include="ifs.frag" />
+    <None Include="mandelbrot.frag" />
+    <None Include="noise.frag" />
+    <None Include="rect.vert" />
+    <None Include="raytracing.frag" />
+    <None Include="test.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h" />

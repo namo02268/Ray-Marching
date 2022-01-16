@@ -23,8 +23,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fs.glsl" />
-    <None Include="vs.glsl" />
+    <None Include="mandelbrot.frag" />
+    <None Include="rect.vert" />
+    <None Include="raytracing.frag" />
+    <None Include="test.frag" />
+    <None Include="ifs.frag" />
+    <None Include="noise.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
